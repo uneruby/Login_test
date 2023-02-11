@@ -5,6 +5,10 @@
 </template>
 
 <script>
+import { authStore } from '../stores/userAuth';
+// const Store = authStore();
+// console.log(Store)
+
 export default {
   name: "Login",
   data() {
@@ -30,6 +34,8 @@ export default {
         })
 
       if(this.msg == "OK"){
+        const Store = authStore();
+        Store.auth(this.authId);
         this.$router.push('/Page1')
       }
 
