@@ -7,6 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+
 const client = new pg.Client({
     user: 'une',
     host: 'localhost',
@@ -16,23 +17,36 @@ const client = new pg.Client({
 })
 
 client.connect()
-// const query = {
-//     text: 'SELECT USER_NAME FROM REGISTERED_USERS;',
-// }
-const query = client.query('SELECT * FROM REGISTERED_USERS WHERE USER_NAME = $1;')
-
 
 app.post('/auth', function(req, res) {
-    if(req.body.id == "une" && req.body.pass == "unko"){
-        res.send({
-            message: "OK",
-            query: query
-        })
-    }else{
-        res.send({
-            message: "認証エラー"
-        })
+    const query = {
+        text: 'SELECT * FROM REGISTERED_USERS',
+        //value: ['une', 'unko'],
     }
+    var rows
+    client.query(query).then(resp => {
+        rows = resp.rows;
+        console.log(rows[0])
+        res.send({
+            message: "OK"
+        })
+        client.end()
+    }).catch(err => {
+        console.error(err.stack);
+        client.end();
+    })
+
+    //console.log(rows)
+    // if(req.body.id == "une" && req.body.pass == "unko"){
+    //     res.send({
+    //         message: "OK"
+    //     })
+    // }else{
+    //     req.send({
+    //         message: "認証エラー"
+    //     })
+    // }
+    
 });
 
 app.listen(process.env.PORT || 3000);
