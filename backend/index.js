@@ -7,18 +7,18 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-
-const client = new pg.Client({
-    user: 'une',
-    host: 'localhost',
-    database: 'login',
-    password: 'llsyou',
-    port: 5432
-})
-
-client.connect()
-
 app.post('/auth', function(req, res) {
+    const client = new pg.Client({
+        user: 'une',
+        host: 'localhost',
+        database: 'login',
+        password: 'llsyou',
+        port: 5432
+    })
+    
+    client.connect()
+    console.log("connect")
+
     const query = {
         text: 'SELECT * FROM REGISTERED_USERS',
         //value: ['une', 'unko'],
