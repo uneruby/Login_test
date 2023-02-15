@@ -19,18 +19,20 @@ app.post('/auth', function(req, res) {
     client.connect()
     console.log("connect")
 
-    const query = {
-        text: 'SELECT * FROM REGISTERED_USERS',
-        //value: ['une', 'unko'],
-    }
     var rows
-    client.query(query).then(resp => {
+    client.query("SELECT * FROM REGISTERED_USERS WHERE USER_NAME = $1;", [req.body.id]).then(resp => {
         rows = resp.rows;
-        console.log(rows[0])
-        res.send({
-            message: "OK"
-        })
-        client.end()
+        if(rows[0].user_password == req.body.pass){
+            res.send({
+                message: "OK"
+            })
+            client.end()
+        }else{
+            res.send({
+                message: "認証エラー"
+            })
+            client.end()
+        }
     }).catch(err => {
         console.error(err.stack);
         client.end();
