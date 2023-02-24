@@ -7,7 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post('/auth', function(req, res) {
+app.post('/auth', async function(req, res) {
     const client = new pg.Client({
         user: 'une',
         host: 'localhost',
@@ -37,18 +37,28 @@ app.post('/auth', function(req, res) {
         console.error(err.stack);
         client.end();
     })
-
-    //console.log(rows)
-    // if(req.body.id == "une" && req.body.pass == "unko"){
-    //     res.send({
-    //         message: "OK"
-    //     })
-    // }else{
-    //     req.send({
-    //         message: "認証エラー"
-    //     })
-    // }
-    
 });
+
+app.post('/signUp', function(req, res) {
+    const client = new pg.Client({
+        user: 'une',
+        host: 'localhost',
+        database: 'login',
+        password: 'llsyou',
+        port: 5432
+    })
+    
+    client.connect()
+    console.log("connect")
+    console.log(req.body.id)
+    console.log(req.body.pass)
+
+    client.query("INSERT INTO REGISTERED_USERS (user_name, user_password) VALUES ($1, $2)", [req.body.id, req.body.pass]).then(res => {
+        console.log(res)
+    }).catch(err => {
+        console.log(err)
+    })
+
+})
 
 app.listen(process.env.PORT || 3000);

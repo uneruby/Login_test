@@ -2,6 +2,9 @@
   <input v-model="authId" type="text" placeholder="UserName">
   <input v-model="authPass" type="password" placeholder="PassWord">
   <button @click="post">ログイン</button>
+  <div>
+    <RouterLink to="/SignUp">サインイン</RouterLink>
+  </div>
 </template>
 
 <script>
