@@ -26,7 +26,7 @@ export default {
     async post() {
       const data = { id: this.authId, pass: this.authPass };
       console.log(data);
-      this.msg = await this.$axios.post('/auth', data)
+      this.msg = await this.$axios.post('/signIn', data)
         .then(function(response){
           console.log(response);
           return response.data.message;
